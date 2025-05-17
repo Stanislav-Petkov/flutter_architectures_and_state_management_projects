@@ -1,0 +1,1 @@
+# flutter_architectures_and_state_management_projects
