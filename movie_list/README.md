@@ -42,8 +42,9 @@ The project follows Clean Architecture principles by separating concerns into la
 - **Domain Layer**: Contains business logic and use cases.
 - **Data Layer**: Manages data sources and APIs.
 
-### 4. **Other Patterns**
-
+### 4. **State Management Patterns**
+- **Cubit Pattern**: The `movie_cubit.dart` file demonstrates the use of the Cubit pattern for state management (a simplified version of the Bloc pattern with less boilerplate).
+- **Bloc/Cubit Architecture**: The application follows the separation of UI, business logic, and events/states that is central to the bloc library approach.
 - **Factory Pattern**: Used for creating objects.
   - Example: A factory method might be used to create instances of `Movie` from JSON data.
 
