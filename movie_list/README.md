@@ -54,6 +54,24 @@ The project follows Clean Architecture principles by separating concerns into la
 - **Repository**: `movie_repository_impl.dart` implements the `MovieRepository` interface.
 - **UI**: `movie_page.dart` displays the list of movies fetched from the API.
 
+## Setting Up the Project
+
+### API Token Configuration
+
+To fetch the movie list, the application requires a token from [The Movie Database (TMDb)](https://www.themoviedb.org/). Follow these steps to configure the token:
+
+1. Obtain your API token by signing up or logging into TMDb.
+2. Create a `.env` file in the root of the project.
+3. Add the following line to the `.env` file:
+
+   ```env
+   BEARER_TOKEN=your_tmdb_bearer_token_here
+   ```
+
+Replace `your_tmdb_bearer_token_here` with your actual TMDb bearer token.
+
+The application will automatically load this token at runtime to authenticate API requests.
+
 ## How to Run
 
 1. Navigate to the project folder:
