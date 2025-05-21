@@ -35,13 +35,17 @@ class MoviesComponent extends StatelessWidget {
   const MoviesComponent({super.key, required this.movies});
 
   final List<MovieModel> movies;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListView.builder(
-        itemBuilder: (context, index) => Text(movies[index].title ?? 'No Title'),
         itemCount: movies.length,
+        itemBuilder: (context, index) {
+          final movie = movies[index];
+          return Card(child: ListTile(title: Text(movie.title ?? 'No Title')));
+        },
       ),
     );
   }

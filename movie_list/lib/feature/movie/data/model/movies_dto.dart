@@ -1,6 +1,10 @@
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:movie_list/feature/movie/domain/model/movies_model.dart';
 
-class MoviesDto {
+part 'movies_dto.mapper.dart';
+
+@MappableClass()
+class MoviesDto with MoviesDtoMappable {
   int? page;
   List<MovieDto>? results;
   int? totalPages;
@@ -8,46 +12,23 @@ class MoviesDto {
 
   MoviesDto({this.page, this.results, this.totalPages, this.totalResults});
 
-  MoviesDto.fromJson(Map<String, dynamic> json) {
-    page = json['page'];
-    if (json['results'] != null) {
-      results = <MovieDto>[];
-      json['results'].forEach((v) {
-        results!.add(MovieDto.fromJson(v));
-      });
-    }
-    totalPages = json['total_pages'];
-    totalResults = json['total_results'];
-  }
+  MoviesModel toModel() => MoviesModel(
+    page: page,
+    results: results?.map((movieDto) => movieDto.toModel()).toList(),
+    totalPages: totalPages,
+    totalResults: totalResults,
+  );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['page'] = page;
-    if (results != null) {
-      data['results'] = results!.map((v) => v.toJson()).toList();
-    }
-    data['total_pages'] = totalPages;
-    data['total_results'] = totalResults;
-    return data;
-  }
+  static const fromJson = MoviesDtoMapper.fromMap;
 }
 
-class MovieDto {
+@MappableClass()
+class MovieDto with MovieDtoMappable {
   String? title;
 
   MovieDto({this.title});
 
-  MovieDto.fromJson(Map<String, dynamic> json) {
-    title = json['title'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-
-    data['title'] = title;
-
-    return data;
-  }
-
   MovieModel toModel() => MovieModel(title: title);
+
+  static const fromJson = MovieDtoMapper.fromMap;
 }

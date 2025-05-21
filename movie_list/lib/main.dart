@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:movie_list/core/di/injection_container.dart';
 import 'package:movie_list/feature/movie/presentation/ui_components/movie_page.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+Future<void> main() async {
+  await dotenv.load(fileName: ".env");
   configureDependencies();
   runApp(MovieApp());
 }
