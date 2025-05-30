@@ -1,16 +1,8 @@
-# bloc_examples
+The analysis_options.yaml file in the project includes two linting configurations:
 
-A new Flutter project.
+flutter_lints/flutter.yaml:
 
-## Getting Started
+This is a set of recommended linting rules for Flutter projects. It enforces best practices and helps maintain consistent, high-quality code in Flutter applications.
+bloc_lint/recommended.yaml:
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+This is a set of linting rules specifically designed for projects using the bloc state management library. It enforces best practices for working with bloc and ensures proper usage patterns.
