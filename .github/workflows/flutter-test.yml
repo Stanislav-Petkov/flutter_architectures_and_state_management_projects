@@ -13,31 +13,27 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Install FVM
-      run: |
-        pub global activate fvm
-
-    - name: Set up Flutter using FVM
-      run: |
-        fvm install 3.29.2
-        fvm use 3.29.2
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.29.2'
 
     - name: Install dependencies for bloc_examples
       run: |
         cd bloc_examples
-        fvm flutter pub get
+        flutter pub get
 
     - name: Run tests for bloc_examples
       run: |
         cd bloc_examples
-        fvm flutter test
+        flutter test
 
     - name: Install dependencies for movie_list
       run: |
         cd movie_list
-        fvm flutter pub get
+        flutter pub get
 
     - name: Run tests for movie_list
       run: |
         cd movie_list
-        fvm flutter test
+        flutter test
