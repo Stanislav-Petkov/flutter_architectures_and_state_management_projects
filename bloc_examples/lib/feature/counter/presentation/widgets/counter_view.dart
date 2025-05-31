@@ -1,4 +1,3 @@
-import 'package:auto_route/annotations.dart';
 import 'package:bloc_examples/feature/counter/presentation/bloc/counter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
