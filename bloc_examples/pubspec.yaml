@@ -24,6 +24,8 @@ dev_dependencies:
   test: ^1.25.15
   bloc_test: ^10.0.0
   bloc_lint: ^0.2.0-dev
+  integration_test:
+    sdk: flutter
   
 flutter:
   uses-material-design: true
