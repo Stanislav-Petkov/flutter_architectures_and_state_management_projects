@@ -1,45 +1,39 @@
-name: Flutter Test
+name: Flutter CI
 
 on:
-  push:
-    branches:
-      - main
-      - develop
-
   pull_request:
     branches:
-      - main
       - develop
-      
+
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
       with:
         flutter-version: 'stable'
 
-    - name: Install dependencies
+    - name: Install dependencies for bloc_examples
       run: |
         cd bloc_examples
         flutter pub get
 
-    - name: Run unit tests
+    - name: Run tests for bloc_examples
       run: |
         cd bloc_examples
         flutter test
 
-    - name: Run integration tests
+    - name: Install dependencies for movie_list
       run: |
-        cd bloc_examples
-        flutter test integration_test
+        cd movie_list
+        flutter pub get
 
-    - name: Run E2E tests
+    - name: Run tests for movie_list
       run: |
-        cd bloc_examples
-        flutter drive --target=test_driver/app.dart
+        cd movie_list
+        flutter test
