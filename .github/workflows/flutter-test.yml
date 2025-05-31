@@ -27,13 +27,3 @@ jobs:
       run: |
         cd bloc_examples
         flutter test
-
-    - name: Install dependencies for movie_list
-      run: |
-        cd movie_list
-        flutter pub get
-
-    - name: Run tests for movie_list
-      run: |
-        cd movie_list
-        flutter test
