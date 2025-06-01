@@ -8,7 +8,7 @@ abstract class DioModule {
     return Dio(
       BaseOptions(
         baseUrl: Constants.baseUrl,
-        headers: {'Authorization': Constants.bearer},
+        headers: {'Authorization': 'Bearer ${Constants.bearer}'},
       ),
     );
   }
