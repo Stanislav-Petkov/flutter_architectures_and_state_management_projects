@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 
 class FavoriteIcon extends StatelessWidget {
+  const FavoriteIcon({
+    super.key,
+    required this.isFavorite,
+    required this.onTap,
+  });
+
   final bool isFavorite;
   final VoidCallback onTap;
-  const FavoriteIcon({Key? key, required this.isFavorite, required this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

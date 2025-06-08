@@ -12,11 +12,13 @@ class ProductCubit extends Cubit<ProductState> {
     // Simulate fetching more products
     Future.delayed(const Duration(milliseconds: 500), () {
       final nextId = state.products.length;
-      final moreProducts = List.generate(20, (i) => Product(
-        id: nextId + i,
-        title: 'Product ${nextId + i + 1}',
-        description: 'Description for product ${nextId + i + 1}',
-      ));
+      final moreProducts = List.generate(
+          20,
+          (i) => Product(
+                id: nextId + i,
+                title: 'Product ${nextId + i + 1}',
+                description: 'Description for product ${nextId + i + 1}',
+              ));
       emit(state.copyWith(
         products: List.of(state.products)..addAll(moreProducts),
         isLoading: false,
@@ -30,18 +32,20 @@ class ProductCubit extends Cubit<ProductState> {
       title: title,
       description: description,
     );
-    emit(state.copyWith(products: List.of(state.products)..insert(0, newProduct)));
+    emit(state.copyWith(
+        products: List.of(state.products)..insert(0, newProduct)));
   }
 
   void removeProduct(int id) {
-    emit(state.copyWith(products: state.products.where((p) => p.id != id).toList()));
+    emit(state.copyWith(
+        products: state.products.where((p) => p.id != id).toList()));
   }
 
   void toggleFavorite(int id) {
     emit(state.copyWith(
-      products: state.products.map((p) =>
-        p.id == id ? p.copyWith(isFavorite: !p.isFavorite) : p
-      ).toList(),
+      products: state.products
+          .map((p) => p.id == id ? p.copyWith(isFavorite: !p.isFavorite) : p)
+          .toList(),
     ));
   }
 }

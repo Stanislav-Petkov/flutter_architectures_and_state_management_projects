@@ -10,7 +10,8 @@ class ProductDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<ProductListCubit>();
-    final current = cubit.state.products.firstWhere((p) => p.id == product.id, orElse: () => product);
+    final current = cubit.state.products
+        .firstWhere((p) => p.id == product.id, orElse: () => product);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Product Details'),
@@ -22,7 +23,8 @@ class ProductDetailsPage extends StatelessWidget {
           children: [
             Text(current.title, style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 16),
-            Text(current.description, style: Theme.of(context).textTheme.bodyMedium),
+            Text(current.description,
+                style: Theme.of(context).textTheme.bodyMedium),
             const SizedBox(height: 24),
             Row(
               children: [
