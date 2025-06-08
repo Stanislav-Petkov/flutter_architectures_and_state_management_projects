@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../domain/models/product.dart';
-import '../cubit/product_list_cubit.dart';
-import '../pages/product_details_page.dart';
+import 'package:products/feature/products/presentation/cubit/product_list_cubit.dart';
+import 'package:products/feature/products/presentation/pages/product_details_page.dart';
+import 'package:products/feature/products/domain/models/product.dart';
 import 'favorite_icon.dart';
 
 class ProductTile extends StatelessWidget {

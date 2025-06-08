@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../domain/models/product.dart';
-import '../cubit/product_list_cubit.dart';
-import '../components/product_tile.dart';
+import 'package:products/feature/products/presentation/cubit/product_list_cubit.dart';
+import 'package:products/feature/products/presentation/components/product_tile.dart';
 
 class ProductGridPage extends StatefulWidget {
-  const ProductGridPage({Key? key}) : super(key: key);
+  const ProductGridPage({super.key});
 
   @override
   State<ProductGridPage> createState() => _ProductGridPageState();

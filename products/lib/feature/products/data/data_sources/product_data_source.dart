@@ -1,5 +1,5 @@
 import 'package:injectable/injectable.dart';
-import '../../domain/models/product.dart';
+import 'package:products/feature/products/domain/models/product.dart';
 
 @lazySingleton
 class ProductDataSource {

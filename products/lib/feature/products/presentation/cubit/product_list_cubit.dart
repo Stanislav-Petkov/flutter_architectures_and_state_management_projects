@@ -1,9 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import '../../domain/models/product.dart';
-
+import 'package:products/feature/products/domain/models/product.dart';
 import 'package:injectable/injectable.dart';
-import '../../domain/repositories/product_repository.dart';
+import 'package:products/feature/products/domain/repositories/product_repository.dart';
 
 part 'product_list_state.dart';
 

@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import '../models/product.dart';
+import 'package:products/feature/products/domain/models/product.dart';
 part 'product_state.dart';
 
 class ProductCubit extends Cubit<ProductState> {

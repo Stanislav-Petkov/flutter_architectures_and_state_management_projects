@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../domain/models/product.dart';
-import '../cubit/product_list_cubit.dart';
+import 'package:products/feature/products/domain/models/product.dart';
+import 'package:products/feature/products/presentation/cubit/product_list_cubit.dart';
 
 class ProductDetailsPage extends StatelessWidget {
   final Product product;
