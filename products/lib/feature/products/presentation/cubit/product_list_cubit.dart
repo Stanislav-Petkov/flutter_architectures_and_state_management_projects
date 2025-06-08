@@ -23,26 +23,27 @@ class ProductListCubit extends Cubit<ProductListState> {
     ));
   }
 
-  void addProduct(String title, String description) {
+  Future<void> addProduct(String title, String description) async {
     final newProduct = Product(
       id: state.products.length,
       title: title,
       description: description,
     );
-    emit(state.copyWith(
-        products: List.of(state.products)..insert(0, newProduct)));
+    await repository.addProduct(newProduct);
+    final products = await repository.fetchProducts(0, state.products.length + 1);
+    emit(state.copyWith(products: products));
   }
 
-  void removeProduct(int id) {
-    emit(state.copyWith(
-        products: state.products.where((p) => p.id != id).toList()));
+  Future<void> removeProduct(int id) async {
+    await repository.removeProduct(id);
+    final products = await repository.fetchProducts(0, state.products.length - 1);
+    emit(state.copyWith(products: products));
   }
 
-  void toggleFavorite(int id) {
-    emit(state.copyWith(
-      products: state.products
-          .map((p) => p.id == id ? p.copyWith(isFavorite: !p.isFavorite) : p)
-          .toList(),
-    ));
+  Future<void> toggleFavorite(int id) async {
+    final product = state.products.firstWhere((p) => p.id == id);
+    await repository.updateFavorite(id, !product.isFavorite);
+    final products = await repository.fetchProducts(0, state.products.length);
+    emit(state.copyWith(products: products));
   }
 }
