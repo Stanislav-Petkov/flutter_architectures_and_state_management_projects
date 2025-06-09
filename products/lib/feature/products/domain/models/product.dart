@@ -18,14 +18,13 @@ class Product extends Equatable {
     String? title,
     String? description,
     bool? isFavorite,
-  }) {
-    return Product(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      description: description ?? this.description,
-      isFavorite: isFavorite ?? this.isFavorite,
-    );
-  }
+  }) =>
+      Product(
+        id: id ?? this.id,
+        title: title ?? this.title,
+        description: description ?? this.description,
+        isFavorite: isFavorite ?? this.isFavorite,
+      );
 
   @override
   List<Object?> get props => [id, title, description, isFavorite];

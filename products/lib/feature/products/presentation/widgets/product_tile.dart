@@ -6,9 +6,9 @@ import 'package:products/feature/products/domain/models/product.dart';
 import 'favorite_icon.dart';
 
 class ProductTile extends StatelessWidget {
-  const ProductTile({super.key, required this.product});
-
   final Product product;
+
+  const ProductTile({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {

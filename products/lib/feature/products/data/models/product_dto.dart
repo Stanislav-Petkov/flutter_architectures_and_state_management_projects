@@ -19,32 +19,27 @@ class ProductDto extends Equatable {
     String? title,
     String? description,
     bool? isFavorite,
-  }) {
-    return ProductDto(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      description: description ?? this.description,
-      isFavorite: isFavorite ?? this.isFavorite,
-    );
-  }
+  }) =>
+      ProductDto(
+        id: id ?? this.id,
+        title: title ?? this.title,
+        description: description ?? this.description,
+        isFavorite: isFavorite ?? this.isFavorite,
+      );
 
-  Product toProduct() {
-    return Product(
-      id: id,
-      title: title ?? '',
-      description: description ?? '',
-      isFavorite: isFavorite ?? false,
-    );
-  }
+  Product toProduct() => Product(
+        id: id,
+        title: title ?? '',
+        description: description ?? '',
+        isFavorite: isFavorite ?? false,
+      );
 
-  factory ProductDto.fromProduct(Product product) {
-    return ProductDto(
-      id: product.id,
-      title: product.title,
-      description: product.description,
-      isFavorite: product.isFavorite,
-    );
-  }
+  factory ProductDto.fromProduct(Product product) => ProductDto(
+        id: product.id,
+        title: product.title,
+        description: product.description,
+        isFavorite: product.isFavorite,
+      );
 
   @override
   List<Object?> get props => [id, title, description, isFavorite];
