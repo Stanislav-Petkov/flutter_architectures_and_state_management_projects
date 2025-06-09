@@ -62,36 +62,48 @@ class _ProductGridPageState extends State<ProductGridPage> {
           if (state.products.isEmpty && state.isLoading) {
             return const Center(child: CircularProgressIndicator());
           }
-          return GridView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            controller: _scrollController,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 1,
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
-            ),
-            itemCount: state.products.length,
-            itemBuilder: (context, index) {
-              final product = state.products[index];
-              return Dismissible(
-                key: ValueKey(product.id),
-                direction: DismissDirection.endToStart,
-                background: Container(
-                  color: Colors.red,
-                  alignment: Alignment.centerRight,
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: const Icon(Icons.delete, color: Colors.white),
+          return Stack(
+            children: [
+              GridView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                controller: _scrollController,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 1,
+                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 10,
                 ),
-                onDismissed: (_) {
-                  context.read<ProductListCubit>().removeProduct(product.id);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Removed "${product.title}"')),
+                itemCount: state.products.length,
+                itemBuilder: (context, index) {
+                  final product = state.products[index];
+                  return Dismissible(
+                    key: ValueKey(product.id),
+                    direction: DismissDirection.endToStart,
+                    background: Container(
+                      color: Colors.red,
+                      alignment: Alignment.centerRight,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: const Icon(Icons.delete, color: Colors.white),
+                    ),
+                    onDismissed: (_) {
+                      context.read<ProductListCubit>().removeProduct(product.id);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Removed "${product.title}"')),
+                      );
+                    },
+                    child: ProductTile(product: product),
                   );
                 },
-                child: ProductTile(product: product),
-              );
-            },
+              ),
+              if (state.isLoading)
+                const Positioned.fill(
+                  child: IgnorePointer(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                ),
+            ],
           );
         },
       ),

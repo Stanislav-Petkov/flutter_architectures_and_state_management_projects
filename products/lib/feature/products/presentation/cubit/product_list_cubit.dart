@@ -16,7 +16,7 @@ class ProductListCubit extends Cubit<ProductListState> {
     if (state.isLoading) return;
     emit(state.copyWith(isLoading: true));
     final nextId = state.products.length;
-    final moreProducts = await repository.fetchProducts(nextId, 20);
+    final moreProducts = await repository.fetchProducts(nextId, 10);
     emit(state.copyWith(
       products: List.of(state.products)..addAll(moreProducts),
       isLoading: false,
