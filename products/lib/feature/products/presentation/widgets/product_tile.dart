@@ -23,33 +23,36 @@ class ProductTile extends StatelessWidget {
       onLongPress: () {
         context.read<ProductListCubit>().removeProduct(product.id);
       },
-      child: Card(
-        margin: EdgeInsets.zero,
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            children: [
-              Text(
-                product.title,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                product.description,
-                style: const TextStyle(fontSize: 12),
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-              ),
-              const Spacer(),
-              FavoriteIcon(
-                isFavorite: product.isFavorite,
-                onTap: () {
-                  context.read<ProductListCubit>().toggleFavorite(product.id);
-                },
-              ),
-            ],
+      child: SizedBox(
+        width: double.infinity,
+        child: Card(
+          margin: EdgeInsets.zero,
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              children: [
+                Text(
+                  product.title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  product.description,
+                  style: const TextStyle(fontSize: 12),
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const Spacer(),
+                FavoriteIcon(
+                  isFavorite: product.isFavorite,
+                  onTap: () {
+                    context.read<ProductListCubit>().toggleFavorite(product.id);
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
