@@ -9,38 +9,48 @@ class ProductDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<ProductListCubit>();
-    final current = cubit.state.products
-        .firstWhere((p) => p.id == product.id, orElse: () => product);
+    // final cubit = context.read<ProductListCubit>();
+    // final current = cubit.state.products
+    // .firstWhere((p) => p.id == product.id, orElse: () => product);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Product Details'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(current.title, style: Theme.of(context).textTheme.titleLarge),
-            const SizedBox(height: 16),
-            Text(current.description,
-                style: Theme.of(context).textTheme.bodyMedium),
-            const SizedBox(height: 24),
-            Row(
+        child: BlocBuilder<ProductListCubit, ProductListState>(
+          builder: (context, state) {
+            final current = state.products
+                .firstWhere((p) => p.id == product.id, orElse: () => product);
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                IconButton(
-                  icon: Icon(
-                    current.isFavorite ? Icons.favorite : Icons.favorite_border,
-                    color: current.isFavorite ? Colors.red : null,
-                  ),
-                  onPressed: () {
-                    cubit.toggleFavorite(current.id);
-                  },
+                Text(current.title,
+                    style: Theme.of(context).textTheme.titleLarge),
+                const SizedBox(height: 16),
+                Text(current.description,
+                    style: Theme.of(context).textTheme.bodyMedium),
+                const SizedBox(height: 24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        current.isFavorite
+                            ? Icons.favorite
+                            : Icons.favorite_border,
+                        color: current.isFavorite ? Colors.red : null,
+                      ),
+                      onPressed: () {
+                        context.read<ProductListCubit>().toggleFavorite(current.id);
+                      },
+                    ),
+                    Text(current.isFavorite ? 'Favorite' : 'Not favorite'),
+                  ],
                 ),
-                Text(current.isFavorite ? 'Favorited' : 'Not favorited'),
               ],
-            ),
-          ],
+            );
+          },
         ),
       ),
     );

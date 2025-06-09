@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:products/feature/products/presentation/cubit/product_list_cubit.dart';
-import 'package:products/feature/products/presentation/components/product_tile.dart';
+import 'package:products/feature/products/presentation/widgets/product_tile.dart';
 
 class ProductGridPage extends StatefulWidget {
   const ProductGridPage({super.key});
