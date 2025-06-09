@@ -24,23 +24,22 @@ class ProductTile extends StatelessWidget {
         context.read<ProductListCubit>().removeProduct(product.id);
       },
       child: Card(
-        margin: EdgeInsets.zero, // Remove margin, use grid spacing only
+        margin: EdgeInsets.zero,
         child: Padding(
-          padding: const EdgeInsets.all(12), // Inner spacing for content
+          padding: const EdgeInsets.all(12),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 product.title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               Text(
-                product.description.length > 40
-                    ? '${product.description.substring(0, 40)}...'
-                    : product.description,
+                product.description,
                 style: const TextStyle(fontSize: 12),
-                maxLines: 2,
+                maxLines: 3,
                 overflow: TextOverflow.ellipsis,
               ),
               const Spacer(),
