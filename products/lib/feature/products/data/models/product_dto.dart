@@ -7,7 +7,7 @@ class ProductDto extends Equatable {
   final String? description;
   final bool? isFavorite;
 
-   const ProductDto({
+  const ProductDto({
     required this.id,
     this.title,
     this.description,

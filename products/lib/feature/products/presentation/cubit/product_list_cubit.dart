@@ -30,13 +30,15 @@ class ProductListCubit extends Cubit<ProductListState> {
       description: description,
     );
     await repository.addProduct(newProduct);
-    final products = await repository.fetchProducts(0, state.products.length + 1);
+    final products =
+        await repository.fetchProducts(0, state.products.length + 1);
     emit(state.copyWith(products: products));
   }
 
   Future<void> removeProduct(int id) async {
     await repository.removeProduct(id);
-    final products = await repository.fetchProducts(0, state.products.length - 1);
+    final products =
+        await repository.fetchProducts(0, state.products.length - 1);
     emit(state.copyWith(products: products));
   }
 

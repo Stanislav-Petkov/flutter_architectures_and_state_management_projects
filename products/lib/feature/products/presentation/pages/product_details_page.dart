@@ -42,7 +42,9 @@ class ProductDetailsPage extends StatelessWidget {
                         color: current.isFavorite ? Colors.red : null,
                       ),
                       onPressed: () {
-                        context.read<ProductListCubit>().toggleFavorite(current.id);
+                        context
+                            .read<ProductListCubit>()
+                            .toggleFavorite(current.id);
                       },
                     ),
                     Text(current.isFavorite ? 'Favorite' : 'Not favorite'),

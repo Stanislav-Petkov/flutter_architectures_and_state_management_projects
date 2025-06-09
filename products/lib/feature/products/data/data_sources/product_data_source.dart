@@ -10,12 +10,14 @@ class ProductDataSource {
   }
 
   void _seedProducts(int startId, int count) {
-    _products.addAll(List.generate(count, (i) => ProductDto(
-      id: startId + i,
-      title: 'Sample Product ${startId + i}',
-      description: 'Description for sample product ${startId + i}',
-      isFavorite: false,
-    )));
+    _products.addAll(List.generate(
+        count,
+        (i) => ProductDto(
+              id: startId + i,
+              title: 'Sample Product ${startId + i}',
+              description: 'Description for sample product ${startId + i}',
+              isFavorite: false,
+            )));
   }
 
   Future<List<ProductDto>> fetchProducts(int start, int count) async {
@@ -24,7 +26,8 @@ class ProductDataSource {
       final lastId = _products.isNotEmpty ? _products.last.id : 0;
       _seedProducts(lastId + 1, 10);
     }
-    final end = (start + count) > _products.length ? _products.length : (start + count);
+    final end =
+        (start + count) > _products.length ? _products.length : (start + count);
     if (start >= _products.length) return [];
     return _products.sublist(start, end);
   }
