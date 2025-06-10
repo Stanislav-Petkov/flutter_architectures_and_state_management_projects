@@ -2,20 +2,21 @@ part of 'product_list_cubit.dart';
 
 enum ProductListAction { none, load, delete, markAsFavorite, addProduct }
 
+@immutable
 class ProductListState extends Equatable {
-  final List<Product> products;
+  final UnmodifiableListView<Product> products;
   final bool isLoading;
   final String? errorMessage;
   final String? successMessage;
   final ProductListAction lastAction;
 
-  const ProductListState({
-    this.products = const [],
+  ProductListState({
+    List<Product>? products,
     this.isLoading = false,
     this.errorMessage,
     this.successMessage,
     this.lastAction = ProductListAction.none,
-  });
+  }) : products = UnmodifiableListView(products ?? const []);
 
   ProductListState copyWith({
     List<Product>? products,
@@ -25,7 +26,8 @@ class ProductListState extends Equatable {
     ProductListAction? lastAction,
   }) {
     return ProductListState(
-      products: products ?? this.products,
+      products:
+          products != null ? UnmodifiableListView(products) : this.products,
       isLoading: isLoading ?? this.isLoading,
       errorMessage: errorMessage,
       successMessage: successMessage,
@@ -34,6 +36,6 @@ class ProductListState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [products, isLoading, errorMessage, successMessage, lastAction];
+  List<Object?> get props =>
+      [products, isLoading, errorMessage, successMessage, lastAction];
 }
-

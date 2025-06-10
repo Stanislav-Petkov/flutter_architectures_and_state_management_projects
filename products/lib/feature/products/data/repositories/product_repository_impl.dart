@@ -1,7 +1,7 @@
 import 'package:injectable/injectable.dart';
+import 'package:products/feature/products/data/data_sources/product_data_source.dart';
 import 'package:products/feature/products/data/models/product_dto.dart';
 import 'package:products/feature/products/domain/repositories/product_repository.dart';
-import 'package:products/feature/products/data/data_sources/product_data_source.dart';
 import 'package:products/feature/products/domain/models/product.dart';
 
 @LazySingleton(as: ProductRepository)
@@ -33,7 +33,7 @@ class ProductRepositoryImpl implements ProductRepository {
   @override
   Future<void> removeProduct(int id) async {
     // throw UnimplementedError();
-    
+
     await dataSource.removeProduct(id);
   }
 }

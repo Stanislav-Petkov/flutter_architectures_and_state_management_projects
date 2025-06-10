@@ -101,7 +101,8 @@ class _ProductGridPageState extends State<ProductGridPage> {
           return Stack(
             children: [
               GridView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 controller: _scrollController,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
@@ -122,7 +123,9 @@ class _ProductGridPageState extends State<ProductGridPage> {
                       child: const Icon(Icons.delete, color: Colors.white),
                     ),
                     confirmDismiss: (_) async {
-                      await context.read<ProductListCubit>().removeProduct(product.id);
+                      await context
+                          .read<ProductListCubit>()
+                          .removeProduct(product.id);
                       // Show snackbar only if removal is successful (handled in Cubit if needed)
                       return false; // Let Cubit/state update remove the widget
                     },
