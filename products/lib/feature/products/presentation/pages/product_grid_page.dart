@@ -57,7 +57,43 @@ class _ProductGridPageState extends State<ProductGridPage> {
           ),
         ],
       ),
-      body: BlocBuilder<ProductListCubit, ProductListState>(
+      body: BlocConsumer<ProductListCubit, ProductListState>(
+        listener: (context, state) {
+          if (state.successMessage != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.successMessage!)),
+            );
+            context.read<ProductListCubit>().clearSuccessMessage();
+          }
+          if (state.errorMessage != null) {
+            if (state.lastAction == ProductListAction.delete ||
+                state.lastAction == ProductListAction.markAsFavorite ||
+                state.lastAction == ProductListAction.addProduct) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(state.errorMessage!)),
+              );
+              context.read<ProductListCubit>().clearError();
+            } else if (state.lastAction == ProductListAction.load) {
+              showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                  title: const Text('Error'),
+                  content: Text(state.errorMessage!),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        context.read<ProductListCubit>().loadMore();
+                        context.read<ProductListCubit>().clearError();
+                      },
+                      child: const Text('Try Again'),
+                    ),
+                  ],
+                ),
+              );
+            }
+          }
+        },
         builder: (context, state) {
           if (state.products.isEmpty && state.isLoading) {
             return const Center(child: CircularProgressIndicator());
@@ -85,11 +121,10 @@ class _ProductGridPageState extends State<ProductGridPage> {
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: const Icon(Icons.delete, color: Colors.white),
                     ),
-                    onDismissed: (_) {
-                      context.read<ProductListCubit>().removeProduct(product.id);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Removed "${product.title}"')),
-                      );
+                    confirmDismiss: (_) async {
+                      await context.read<ProductListCubit>().removeProduct(product.id);
+                      // Show snackbar only if removal is successful (handled in Cubit if needed)
+                      return false; // Let Cubit/state update remove the widget
                     },
                     child: ProductTile(product: product),
                   );
