@@ -9,9 +9,6 @@ class ProductDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final cubit = context.read<ProductListCubit>();
-    // final current = cubit.state.products
-    // .firstWhere((p) => p.id == product.id, orElse: () => product);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Product Details'),
