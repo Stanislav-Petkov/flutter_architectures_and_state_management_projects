@@ -68,47 +68,7 @@ class _ProductGridPageState extends State<ProductGridPage> {
             context.read<ProductListCubit>().clearSuccessMessage();
           }
           if (state.error != null) {
-            switch (state.error) {
-              case ProductListError.markAsFavoriteError:
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Failed to mark as favorite')),
-                );
-                context.read<ProductListCubit>().clearError();
-                break;
-              case ProductListError.addProductError:
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Failed to add product')),
-                );
-                context.read<ProductListCubit>().clearError();
-                break;
-              case ProductListError.deleteProductError:
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Failed to delete product')),
-                );
-                context.read<ProductListCubit>().clearError();
-                break;
-              case ProductListError.loadMoreProductsError:
-                showDialog(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                    title: const Text('Error'),
-                    content: const Text('Failed to load more products'),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          context.read<ProductListCubit>().loadMore();
-                          context.read<ProductListCubit>().clearError();
-                        },
-                        child: const Text('Try Again'),
-                      ),
-                    ],
-                  ),
-                );
-                break;
-              default:
-                break;
-            }
+            _handleProductListError(context, state.error!);
           }
         },
         builder: (context, state) {
@@ -163,6 +123,48 @@ class _ProductGridPageState extends State<ProductGridPage> {
         },
       ),
     );
+  }
+
+  void _handleProductListError(BuildContext context, ProductListError error) {
+    switch (error) {
+      case ProductListError.markAsFavoriteError:
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to mark as favorite')),
+        );
+        context.read<ProductListCubit>().clearError();
+        break;
+      case ProductListError.addProductError:
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to add product')),
+        );
+        context.read<ProductListCubit>().clearError();
+        break;
+      case ProductListError.deleteProductError:
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to delete product')),
+        );
+        context.read<ProductListCubit>().clearError();
+        break;
+      case ProductListError.loadMoreProductsError:
+        showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            title: const Text('Error'),
+            content: const Text('Failed to load more products'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  context.read<ProductListCubit>().loadMore();
+                  context.read<ProductListCubit>().clearError();
+                },
+                child: const Text('Try Again'),
+              ),
+            ],
+          ),
+        );
+        break;
+    }
   }
 }
 
