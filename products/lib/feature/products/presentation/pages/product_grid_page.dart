@@ -3,6 +3,8 @@ import 'package:products/feature/products/presentation/cubit/product_list_error.
 import 'package:products/feature/products/presentation/cubit/product_list_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:products/feature/products/presentation/cubit/product_list_cubit.dart';
+import 'package:products/feature/products/presentation/widgets/add_product_dialog.dart';
+import 'package:products/feature/products/presentation/widgets/product_loader.dart';
 import 'package:products/feature/products/presentation/widgets/product_tile.dart';
 
 class ProductGridPage extends StatefulWidget {
@@ -103,21 +105,13 @@ class _ProductGridPageState extends State<ProductGridPage> {
                       await context
                           .read<ProductListCubit>()
                           .removeProduct(product.id);
-                      // Show snackbar only if removal is successful (handled in Cubit if needed)
-                      return false; // Let Cubit/state update remove the widget
+                      return false;
                     },
                     child: ProductTile(product: product),
                   );
                 },
               ),
-              if (state.isLoading)
-                const Positioned.fill(
-                  child: IgnorePointer(
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
-                ),
+              if (state.isLoading) ProductLoader()
             ],
           );
         },
@@ -128,114 +122,46 @@ class _ProductGridPageState extends State<ProductGridPage> {
   void _handleProductListError(BuildContext context, ProductListError error) {
     switch (error) {
       case ProductListError.markAsFavoriteError:
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to mark as favorite')),
-        );
+        _showSnackBar(context, message: 'Failed to mark as favorite');
         context.read<ProductListCubit>().clearError();
         break;
       case ProductListError.addProductError:
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to add product')),
-        );
+        _showSnackBar(context, message: 'Failed to add product');
         context.read<ProductListCubit>().clearError();
         break;
       case ProductListError.deleteProductError:
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to delete product')),
-        );
+        _showSnackBar(context, message: 'Failed to delete product');
         context.read<ProductListCubit>().clearError();
         break;
       case ProductListError.loadMoreProductsError:
-        showDialog(
-          context: context,
-          builder: (_) => AlertDialog(
-            title: const Text('Error'),
-            content: const Text('Failed to load more products'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  context.read<ProductListCubit>().loadMore();
-                  context.read<ProductListCubit>().clearError();
-                },
-                child: const Text('Try Again'),
-              ),
-            ],
-          ),
-        );
+        _showDialog(context, message: 'Failed to load more products');
         break;
     }
   }
-}
 
-class AddProductDialog extends StatefulWidget {
-  const AddProductDialog({super.key});
-
-  @override
-  State<AddProductDialog> createState() => _AddProductDialogState();
-}
-
-class _AddProductDialogState extends State<AddProductDialog> {
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _descController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-
-  @override
-  void dispose() {
-    _titleController.dispose();
-    _descController.dispose();
-    super.dispose();
+  void _showSnackBar(BuildContext context, {required String message}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text('Add Product'),
-      content: Form(
-        key: _formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextFormField(
-              controller: _titleController,
-              decoration: const InputDecoration(labelText: 'Title'),
-              autofocus: true,
-              validator: (value) => (value == null || value.trim().isEmpty)
-                  ? 'Enter a title'
-                  : null,
-            ),
-            TextFormField(
-              controller: _descController,
-              decoration: const InputDecoration(labelText: 'Description'),
-              validator: (value) => (value == null || value.trim().isEmpty)
-                  ? 'Enter a description'
-                  : null,
-            ),
-          ],
-        ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: const Text('Cancel'),
-        ),
-        ElevatedButton(
-          onPressed: () {
-            if (_formKey.currentState!.validate()) {
-              final title = _titleController.text.trim();
-              final desc = _descController.text.trim();
-              context.read<ProductListCubit>().addProduct(title, desc);
-              _titleController.clear();
-              _descController.clear();
-              FocusScope.of(context).unfocus();
+  void _showDialog(BuildContext context, {required String message}) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Error'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () {
               Navigator.of(context).pop();
-            }
-          },
-          child: const Text('Add'),
-        ),
-      ],
+              context.read<ProductListCubit>().loadMore();
+              context.read<ProductListCubit>().clearError();
+            },
+            child: const Text('Try Again'),
+          ),
+        ],
+      ),
     );
   }
 }
