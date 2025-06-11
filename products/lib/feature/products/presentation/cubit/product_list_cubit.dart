@@ -1,11 +1,10 @@
-import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'product_list_state.dart';
+import 'product_list_error.dart';
+
 import 'package:products/feature/products/domain/models/product.dart';
 import 'package:injectable/injectable.dart';
 import 'package:products/feature/products/domain/repositories/product_repository.dart';
-import 'dart:collection';
-import 'package:meta/meta.dart';
-part 'product_list_state.dart';
 
 @injectable
 class ProductListCubit extends Cubit<ProductListState> {
@@ -13,39 +12,25 @@ class ProductListCubit extends Cubit<ProductListState> {
 
   final ProductRepository repository;
 
-  Future<void> _runWithErrorHandling(Future<void> Function() action,
-      {ProductListAction? lastAction}) async {
-    try {
-      await action();
-    } catch (e) {
-      emit(state.copyWith(
-        isLoading: false,
-        errorMessage: 'There was an error, please try again.',
-        lastAction: lastAction,
-      ));
-    }
-  }
-
   Future<void> loadMore() async {
     if (state.isLoading) return;
     emit(state.copyWith(
-        isLoading: true,
-        errorMessage: null,
-        lastAction: ProductListAction.load));
-    await _runWithErrorHandling(() async {
+      isLoading: true,
+      error: null,
+    ));
+    await _errorHandling(() async {
       final nextId = state.products.length;
       final moreProducts = await repository.fetchProducts(nextId, 10);
       emit(state.copyWith(
         products: List.of(state.products)..addAll(moreProducts),
         isLoading: false,
-        errorMessage: null,
-        lastAction: ProductListAction.none,
+        error: null,
       ));
-    }, lastAction: ProductListAction.load);
+    }, error: ProductListError.loadMoreProductsError);
   }
 
   Future<void> addProduct(String title, String description) async {
-    await _runWithErrorHandling(() async {
+    await _errorHandling(() async {
       final newProduct = Product(
         id: state.products.length,
         title: title,
@@ -56,10 +41,9 @@ class ProductListCubit extends Cubit<ProductListState> {
         ..add(newProduct);
       emit(state.copyWith(
           products: updatedProducts,
-          errorMessage: null,
-          lastAction: ProductListAction.none,
+          error: null,
           successMessage: 'Product added successfully!'));
-    }, lastAction: ProductListAction.addProduct);
+    }, error: ProductListError.addProductError);
   }
 
   void clearSuccessMessage() {
@@ -67,19 +51,19 @@ class ProductListCubit extends Cubit<ProductListState> {
   }
 
   Future<void> removeProduct(int id) async {
-    await _runWithErrorHandling(() async {
+    await _errorHandling(() async {
       await repository.removeProduct(id);
       final updatedProducts = List<Product>.from(state.products)
         ..removeWhere((p) => p.id == id);
       emit(state.copyWith(
-          products: updatedProducts,
-          errorMessage: null,
-          lastAction: ProductListAction.none));
-    }, lastAction: ProductListAction.delete);
+        products: updatedProducts,
+        error: null,
+      ));
+    }, error: ProductListError.deleteProductError);
   }
 
   Future<void> toggleFavorite(int id) async {
-    await _runWithErrorHandling(() async {
+    await _errorHandling(() async {
       final product = state.products.firstWhere((item) => item.id == id);
       await repository.updateFavorite(id, !product.isFavorite);
       final updatedProducts = state.products.map((item) {
@@ -89,14 +73,25 @@ class ProductListCubit extends Cubit<ProductListState> {
         return item;
       }).toList();
       emit(state.copyWith(
-          products: updatedProducts,
-          errorMessage: null,
-          lastAction: ProductListAction.none));
-    }, lastAction: ProductListAction.markAsFavorite);
+        products: updatedProducts,
+        error: null,
+      ));
+    }, error: ProductListError.markAsFavoriteError);
   }
 
   void clearError() {
-    emit(
-        state.copyWith(errorMessage: null, lastAction: ProductListAction.none));
+    emit(state.copyWith(error: null));
+  }
+
+  Future<void> _errorHandling(Future<void> Function() action,
+      {ProductListError? error}) async {
+    try {
+      await action();
+    } catch (e) {
+      emit(state.copyWith(
+        isLoading: false,
+        error: error,
+      ));
+    }
   }
 }

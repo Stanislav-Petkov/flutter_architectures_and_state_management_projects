@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:products/feature/products/presentation/cubit/product_list_error.dart';
+import 'package:products/feature/products/presentation/cubit/product_list_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:products/feature/products/presentation/cubit/product_list_cubit.dart';
 import 'package:products/feature/products/presentation/widgets/product_tile.dart';
@@ -65,32 +67,47 @@ class _ProductGridPageState extends State<ProductGridPage> {
             );
             context.read<ProductListCubit>().clearSuccessMessage();
           }
-          if (state.errorMessage != null) {
-            if (state.lastAction == ProductListAction.delete ||
-                state.lastAction == ProductListAction.markAsFavorite ||
-                state.lastAction == ProductListAction.addProduct) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.errorMessage!)),
-              );
-              context.read<ProductListCubit>().clearError();
-            } else if (state.lastAction == ProductListAction.load) {
-              showDialog(
-                context: context,
-                builder: (_) => AlertDialog(
-                  title: const Text('Error'),
-                  content: Text(state.errorMessage!),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        context.read<ProductListCubit>().loadMore();
-                        context.read<ProductListCubit>().clearError();
-                      },
-                      child: const Text('Try Again'),
-                    ),
-                  ],
-                ),
-              );
+          if (state.error != null) {
+            switch (state.error) {
+              case ProductListError.markAsFavoriteError:
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Failed to mark as favorite')),
+                );
+                context.read<ProductListCubit>().clearError();
+                break;
+              case ProductListError.addProductError:
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Failed to add product')),
+                );
+                context.read<ProductListCubit>().clearError();
+                break;
+              case ProductListError.deleteProductError:
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Failed to delete product')),
+                );
+                context.read<ProductListCubit>().clearError();
+                break;
+              case ProductListError.loadMoreProductsError:
+                showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    title: const Text('Error'),
+                    content: const Text('Failed to load more products'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          context.read<ProductListCubit>().loadMore();
+                          context.read<ProductListCubit>().clearError();
+                        },
+                        child: const Text('Try Again'),
+                      ),
+                    ],
+                  ),
+                );
+                break;
+              default:
+                break;
             }
           }
         },
