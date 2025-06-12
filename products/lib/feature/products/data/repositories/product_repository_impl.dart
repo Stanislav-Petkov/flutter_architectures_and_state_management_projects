@@ -13,27 +13,22 @@ class ProductRepositoryImpl implements ProductRepository {
   @override
   Future<List<Product>> fetchProducts(int start, int count) async {
     final dtos = await dataSource.fetchProducts(start, count);
-    // throw UnimplementedError();
     return dtos.map((dto) => dto.toProduct()).toList();
   }
 
   @override
   Future<void> addProduct(Product product) async {
     final dto = ProductDto.fromProduct(product);
-    // throw UnimplementedError();
     await dataSource.addProduct(dto);
   }
 
   @override
   Future<void> updateFavorite(int id, bool isFavorite) async {
-    // throw UnimplementedError();
     await dataSource.updateFavorite(id, isFavorite);
   }
 
   @override
   Future<void> removeProduct(int id) async {
-    // throw UnimplementedError();
-
     await dataSource.removeProduct(id);
   }
 }

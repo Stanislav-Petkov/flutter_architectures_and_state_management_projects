@@ -49,61 +49,57 @@ class _ProductGridPageState extends State<ProductGridPage> {
     );
   }
 
-  PreferredSizeWidget _buildAppBar(BuildContext context) {
-    return AppBar(
-      title: const Text('Products'),
-      actions: [
-        PopupMenuButton<String>(
-          onSelected: (value) {
-            if (value == 'add') {
-              showDialog(
-                context: context,
-                builder: (_) => AddProductDialog(),
-              );
-            }
-          },
-          itemBuilder: (context) => [
-            const PopupMenuItem(
-              value: 'add',
-              child: Text('Add Product'),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildProductGrid(ProductListState state) {
-    return GridView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      controller: _scrollController,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 1,
-        mainAxisSpacing: 10,
-        crossAxisSpacing: 10,
-      ),
-      itemCount: state.products.length,
-      itemBuilder: (context, index) {
-        final product = state.products[index];
-        return Dismissible(
-          key: ValueKey(product.id),
-          direction: DismissDirection.endToStart,
-          background: Container(
-            color: Colors.red,
-            alignment: Alignment.centerRight,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: const Icon(Icons.delete, color: Colors.white),
+  PreferredSizeWidget _buildAppBar(BuildContext context) => AppBar(
+        title: const Text('Products'),
+        actions: [
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              if (value == 'add') {
+                showDialog(
+                  context: context,
+                  builder: (_) => AddProductDialog(),
+                );
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: 'add',
+                child: Text('Add Product'),
+              ),
+            ],
           ),
-          confirmDismiss: (_) async {
-            await context.read<ProductListCubit>().removeProduct(product.id);
-            return false;
-          },
-          child: ProductTile(product: product),
-        );
-      },
-    );
-  }
+        ],
+      );
+
+  Widget _buildProductGrid(ProductListState state) => GridView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        controller: _scrollController,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 1,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+        ),
+        itemCount: state.products.length,
+        itemBuilder: (context, index) {
+          final product = state.products[index];
+          return Dismissible(
+            key: ValueKey(product.id),
+            direction: DismissDirection.endToStart,
+            background: Container(
+              color: Colors.red,
+              alignment: Alignment.centerRight,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: const Icon(Icons.delete, color: Colors.white),
+            ),
+            confirmDismiss: (_) async {
+              await context.read<ProductListCubit>().removeProduct(product.id);
+              return false;
+            },
+            child: ProductTile(product: product),
+          );
+        },
+      );
 
   void _handleProductListError(BuildContext context, ProductListError error) {
     switch (error) {
@@ -131,25 +127,24 @@ class _ProductGridPageState extends State<ProductGridPage> {
     );
   }
 
-  void _showDialog(BuildContext context, {required String message}) {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Error'),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              context.read<ProductListCubit>().loadMore();
-              context.read<ProductListCubit>().clearError();
-            },
-            child: const Text('Try Again'),
-          ),
-        ],
-      ),
-    );
-  }
+  void _showDialog(BuildContext context, {required String message}) =>
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: const Text('Error'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                context.read<ProductListCubit>().loadMore();
+                context.read<ProductListCubit>().clearError();
+              },
+              child: const Text('Try Again'),
+            ),
+          ],
+        ),
+      );
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
