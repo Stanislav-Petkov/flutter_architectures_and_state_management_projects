@@ -99,8 +99,4 @@ class ProductListCubit extends Cubit<ProductListState> {
       ));
     }
   }
-
-  void clearSuccessMessage() {
-    emit(state.copyWith(successMessage: null));
-  }
 }
