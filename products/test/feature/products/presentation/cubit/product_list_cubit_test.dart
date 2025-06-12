@@ -48,7 +48,8 @@ void main() {
     blocTest<ProductListCubit, ProductListState>(
       'emits loading and loaded state with products when loadMore succeeds',
       build: () {
-        when(() => repository.fetchProducts(any(), any())).thenAnswer((_) async => [testProduct]);
+        when(() => repository.fetchProducts(any(), any()))
+            .thenAnswer((_) async => [testProduct]);
         return cubit;
       },
       act: (cubit) => cubit.loadMore(),
@@ -67,7 +68,8 @@ void main() {
     blocTest<ProductListCubit, ProductListState>(
       'emits error state when loadMore fails',
       build: () {
-        when(() => repository.fetchProducts(any(), any())).thenThrow(Exception('fetch failed'));
+        when(() => repository.fetchProducts(any(), any()))
+            .thenThrow(Exception('fetch failed'));
         return cubit;
       },
       act: (cubit) => cubit.loadMore(),
@@ -75,7 +77,8 @@ void main() {
         isA<ProductListState>().having((s) => s.isLoading, 'isLoading', true),
         isA<ProductListState>()
             .having((s) => s.isLoading, 'isLoading', false)
-            .having((s) => s.error, 'error', ProductListError.loadMoreProductsError),
+            .having((s) => s.error, 'error',
+                ProductListError.loadMoreProductsError),
       ],
       verify: (_) {
         verify(() => repository.fetchProducts(0, 10)).called(1);

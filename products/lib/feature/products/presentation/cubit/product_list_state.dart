@@ -20,7 +20,6 @@ class ProductListState extends Equatable {
     List<Product>? products,
     bool? isLoading,
     ProductListError? error,
-    String? successMessage,
   }) {
     return ProductListState(
       products:

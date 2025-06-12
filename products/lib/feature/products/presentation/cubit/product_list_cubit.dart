@@ -37,10 +37,10 @@ class ProductListCubit extends Cubit<ProductListState> {
       final updatedProducts = List<Product>.from(state.products)
         ..add(newProduct);
       emit(state.copyWith(
-          products: updatedProducts,
-          error: null,
-          isLoading: false,
-          successMessage: 'Product added successfully!'));
+        products: updatedProducts,
+        error: null,
+        isLoading: false,
+      ));
     }, error: ProductListError.addProductError);
   }
 
