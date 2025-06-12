@@ -24,43 +24,10 @@ class _ProductGridPageState extends State<ProductGridPage> {
     context.read<ProductListCubit>().loadMore();
   }
 
-  void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context.read<ProductListCubit>().loadMore();
-    }
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Products'),
-        actions: [
-          PopupMenuButton<String>(
-            onSelected: (value) {
-              if (value == 'add') {
-                showDialog(
-                  context: context,
-                  builder: (_) => AddProductDialog(),
-                );
-              }
-            },
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: 'add',
-                child: Text('Add Product'),
-              ),
-            ],
-          ),
-        ],
-      ),
+      appBar: _buildAppBar(context),
       body: BlocConsumer<ProductListCubit, ProductListState>(
         listener: (context, state) {
           if (state.error != null) {
@@ -73,43 +40,68 @@ class _ProductGridPageState extends State<ProductGridPage> {
           }
           return Stack(
             children: [
-              GridView.builder(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                controller: _scrollController,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 1,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                ),
-                itemCount: state.products.length,
-                itemBuilder: (context, index) {
-                  final product = state.products[index];
-                  return Dismissible(
-                    key: ValueKey(product.id),
-                    direction: DismissDirection.endToStart,
-                    background: Container(
-                      color: Colors.red,
-                      alignment: Alignment.centerRight,
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: const Icon(Icons.delete, color: Colors.white),
-                    ),
-                    confirmDismiss: (_) async {
-                      await context
-                          .read<ProductListCubit>()
-                          .removeProduct(product.id);
-                      return false;
-                    },
-                    child: ProductTile(product: product),
-                  );
-                },
-              ),
-              if (state.isLoading) ProductLoader()
+              _buildProductGrid(state),
+              if (state.isLoading) const ProductLoader(),
             ],
           );
         },
       ),
+    );
+  }
+
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
+    return AppBar(
+      title: const Text('Products'),
+      actions: [
+        PopupMenuButton<String>(
+          onSelected: (value) {
+            if (value == 'add') {
+              showDialog(
+                context: context,
+                builder: (_) => AddProductDialog(),
+              );
+            }
+          },
+          itemBuilder: (context) => [
+            const PopupMenuItem(
+              value: 'add',
+              child: Text('Add Product'),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildProductGrid(ProductListState state) {
+    return GridView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      controller: _scrollController,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 1,
+        mainAxisSpacing: 10,
+        crossAxisSpacing: 10,
+      ),
+      itemCount: state.products.length,
+      itemBuilder: (context, index) {
+        final product = state.products[index];
+        return Dismissible(
+          key: ValueKey(product.id),
+          direction: DismissDirection.endToStart,
+          background: Container(
+            color: Colors.red,
+            alignment: Alignment.centerRight,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: const Icon(Icons.delete, color: Colors.white),
+          ),
+          confirmDismiss: (_) async {
+            await context.read<ProductListCubit>().removeProduct(product.id);
+            return false;
+          },
+          child: ProductTile(product: product),
+        );
+      },
     );
   }
 
@@ -157,5 +149,18 @@ class _ProductGridPageState extends State<ProductGridPage> {
         ],
       ),
     );
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      context.read<ProductListCubit>().loadMore();
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 }
