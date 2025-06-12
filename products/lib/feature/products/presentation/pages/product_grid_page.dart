@@ -63,12 +63,6 @@ class _ProductGridPageState extends State<ProductGridPage> {
       ),
       body: BlocConsumer<ProductListCubit, ProductListState>(
         listener: (context, state) {
-          if (state.successMessage != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.successMessage!)),
-            );
-            context.read<ProductListCubit>().clearSuccessMessage();
-          }
           if (state.error != null) {
             _handleProductListError(context, state.error!);
           }

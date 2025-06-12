@@ -9,13 +9,11 @@ class ProductListState extends Equatable {
   final UnmodifiableListView<Product> products;
   final bool isLoading;
   final ProductListError? error;
-  final String? successMessage;
 
   ProductListState({
     List<Product>? products,
     this.isLoading = false,
     this.error,
-    this.successMessage,
   }) : products = UnmodifiableListView(products ?? const []);
 
   ProductListState copyWith({
@@ -29,10 +27,9 @@ class ProductListState extends Equatable {
           products != null ? UnmodifiableListView(products) : this.products,
       isLoading: isLoading ?? this.isLoading,
       error: error,
-      successMessage: successMessage,
     );
   }
 
   @override
-  List<Object?> get props => [products, isLoading, error, successMessage];
+  List<Object?> get props => [products, isLoading, error];
 }

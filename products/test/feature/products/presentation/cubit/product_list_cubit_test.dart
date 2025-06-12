@@ -38,8 +38,7 @@ void main() {
         isA<ProductListState>().having((s) => s.isLoading, 'isLoading', true),
         isA<ProductListState>()
             .having((s) => s.products.length, 'products.length', 1)
-            .having((s) => s.isLoading, 'isLoading', false)
-            .having((s) => s.successMessage, 'successMessage', 'Product added successfully!'),
+            .having((s) => s.isLoading, 'isLoading', false),
       ],
       verify: (_) {
         verify(() => repository.addProduct(any())).called(1);
