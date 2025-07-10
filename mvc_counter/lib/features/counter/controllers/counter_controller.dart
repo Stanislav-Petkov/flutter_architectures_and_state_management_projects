@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mvc_counter/counter_model.dart';
+import 'package:mvc_counter/features/counter/models/counter_model.dart';
 
 class CounterController {
   final CounterModel _counterModel = CounterModel();

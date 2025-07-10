@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mvc_counter/counter_controller.dart';
-import 'package:mvc_counter/counter_view.dart';
+import 'package:mvc_counter/features/counter/controllers/counter_controller.dart';
+import 'package:mvc_counter/features/counter/views/counter_view.dart';
 
 void main() {
   final counterController = CounterController();

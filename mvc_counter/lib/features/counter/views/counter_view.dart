@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mvc_counter/counter_controller.dart';
+import 'package:mvc_counter/features/counter/controllers/counter_controller.dart';
 
 class CounterView extends StatelessWidget {
   const CounterView({super.key, required this.controller});
