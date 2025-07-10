@@ -6,7 +6,6 @@ import 'package:products/feature/products/presentation/cubit/product_list_error.
 import 'package:products/feature/products/presentation/cubit/product_list_state.dart';
 import 'package:products/feature/products/domain/models/product.dart';
 import 'package:products/feature/products/domain/repositories/product_repository.dart';
-import 'package:products/feature/products/presentation/cubit/product_list_state.dart';
 
 class MockProductRepository extends Mock implements ProductRepository {}
 
@@ -25,12 +24,14 @@ void main() {
   });
 
   group('ProductListCubit', () {
-    const testProduct = Product(id: 0, title: 'Test', description: 'Test Desc');
+    const testProduct =
+        Product(id: 'test-id-123', title: 'Test', description: 'Test Desc');
 
     blocTest<ProductListCubit, ProductListState>(
       'emits state with new product when addProduct succeeds',
       build: () {
-        when(() => repository.addProduct(any())).thenAnswer((_) async {});
+        when(() => repository.addProduct(any()))
+            .thenAnswer((_) async => testProduct);
         return cubit;
       },
       act: (cubit) => cubit.addProduct('Test', 'Test Desc'),
@@ -92,7 +93,7 @@ void main() {
         cubit.emit(cubit.state.copyWith(products: [testProduct]));
         return cubit;
       },
-      act: (cubit) => cubit.removeProduct(0),
+      act: (cubit) => cubit.removeProduct('test-id-123'),
       expect: () => [
         isA<ProductListState>().having((s) => s.isLoading, 'isLoading', true),
         isA<ProductListState>()
@@ -100,18 +101,19 @@ void main() {
             .having((s) => s.isLoading, 'isLoading', false),
       ],
       verify: (_) {
-        verify(() => repository.removeProduct(0)).called(1);
+        verify(() => repository.removeProduct('test-id-123')).called(1);
       },
     );
 
     blocTest<ProductListCubit, ProductListState>(
       'emits state with toggled favorite when toggleFavorite succeeds',
       build: () {
-        when(() => repository.updateFavorite(0, true)).thenAnswer((_) async {});
+        when(() => repository.updateFavorite('test-id-123', true))
+            .thenAnswer((_) async {});
         cubit.emit(cubit.state.copyWith(products: [testProduct]));
         return cubit;
       },
-      act: (cubit) => cubit.toggleFavorite(0),
+      act: (cubit) => cubit.toggleFavorite('test-id-123'),
       expect: () => [
         isA<ProductListState>().having((s) => s.isLoading, 'isLoading', true),
         isA<ProductListState>()
@@ -119,7 +121,7 @@ void main() {
             .having((s) => s.isLoading, 'isLoading', false),
       ],
       verify: (_) {
-        verify(() => repository.updateFavorite(0, true)).called(1);
+        verify(() => repository.updateFavorite('test-id-123', true)).called(1);
       },
     );
   });

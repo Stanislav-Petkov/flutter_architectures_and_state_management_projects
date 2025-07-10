@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:products/feature/products/domain/models/product.dart';
 
 class ProductDto extends Equatable {
-  final int id;
+  final String id;
   final String? title;
   final String? description;
   final bool? isFavorite;
@@ -15,7 +15,7 @@ class ProductDto extends Equatable {
   });
 
   ProductDto copyWith({
-    int? id,
+    String? id,
     String? title,
     String? description,
     bool? isFavorite,

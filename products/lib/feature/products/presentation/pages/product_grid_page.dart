@@ -25,29 +25,27 @@ class _ProductGridPageState extends State<ProductGridPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildAppBar(context),
-      body: BlocConsumer<ProductListCubit, ProductListState>(
-        listener: (context, state) {
-          if (state.error != null) {
-            _handleProductListError(context, state.error!);
-          }
-        },
-        builder: (context, state) {
-          if (state.products.isEmpty && state.isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          return Stack(
-            children: [
-              _buildProductGrid(state),
-              if (state.isLoading) const ProductLoader(),
-            ],
-          );
-        },
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Scaffold(
+        appBar: _buildAppBar(context),
+        body: BlocConsumer<ProductListCubit, ProductListState>(
+          listener: (context, state) {
+            if (state.error != null) {
+              _handleProductListError(context, state.error, state.errorMessage);
+            }
+          },
+          builder: (context, state) {
+            if (state.products.isEmpty && state.isLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return Stack(
+              children: [
+                _buildProductGrid(state),
+                if (state.isLoading) const ProductLoader(),
+              ],
+            );
+          },
+        ),
+      );
 
   PreferredSizeWidget _buildAppBar(BuildContext context) => AppBar(
         title: const Text('Products'),
@@ -101,31 +99,21 @@ class _ProductGridPageState extends State<ProductGridPage> {
         },
       );
 
-  void _handleProductListError(BuildContext context, ProductListError error) {
-    switch (error) {
-      case ProductListError.markAsFavoriteError:
-        _showSnackBar(context, message: 'Failed to mark as favorite');
-        context.read<ProductListCubit>().clearError();
-        break;
-      case ProductListError.addProductError:
-        _showSnackBar(context, message: 'Failed to add product');
-        context.read<ProductListCubit>().clearError();
-        break;
-      case ProductListError.deleteProductError:
-        _showSnackBar(context, message: 'Failed to delete product');
-        context.read<ProductListCubit>().clearError();
-        break;
-      case ProductListError.loadMoreProductsError:
-        _showDialog(context, message: 'Failed to load more products');
-        break;
+  void _handleProductListError(
+      BuildContext context, ProductListError? error, String? errorMessage) {
+    if (error == ProductListError.loadMoreProductsError &&
+        errorMessage != null) {
+      _showDialog(context, message: errorMessage);
+    } else if (error != null && errorMessage != null) {
+      _showSnackBar(context, message: errorMessage);
+      context.read<ProductListCubit>().clearError();
     }
   }
 
-  void _showSnackBar(BuildContext context, {required String message}) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
-  }
+  void _showSnackBar(BuildContext context, {required String message}) =>
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
 
   void _showDialog(BuildContext context, {required String message}) =>
       showDialog(

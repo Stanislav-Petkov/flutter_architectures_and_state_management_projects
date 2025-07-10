@@ -9,25 +9,28 @@ class ProductListState extends Equatable {
   final UnmodifiableListView<Product> products;
   final bool isLoading;
   final ProductListError? error;
+  final String? errorMessage;
 
   ProductListState({
     List<Product>? products,
     this.isLoading = false,
     this.error,
+    this.errorMessage,
   }) : products = UnmodifiableListView(products ?? const []);
 
   ProductListState copyWith({
     List<Product>? products,
     bool? isLoading,
     ProductListError? error,
-  }) {
-    return ProductListState(
-      products:
-          products != null ? UnmodifiableListView(products) : this.products,
-      isLoading: isLoading ?? this.isLoading,
-      error: error,
-    );
-  }
+    String? errorMessage,
+  }) =>
+      ProductListState(
+        products:
+            products != null ? UnmodifiableListView(products) : this.products,
+        isLoading: isLoading ?? this.isLoading,
+        error: error,
+        errorMessage: errorMessage,
+      );
 
   @override
   List<Object?> get props => [products, isLoading, error];

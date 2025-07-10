@@ -23,12 +23,10 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<void> updateFavorite(int id, bool isFavorite) async {
-    await dataSource.updateFavorite(id, isFavorite);
+  Future<void> updateFavorite(String id, bool isFavorite) async {
+    dataSource.updateFavorite(id, isFavorite);
   }
 
   @override
-  Future<void> removeProduct(int id) async {
-    await dataSource.removeProduct(id);
-  }
+  Future<void> removeProduct(String id) async => dataSource.removeProduct(id);
 }

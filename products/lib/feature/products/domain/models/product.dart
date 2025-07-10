@@ -1,7 +1,10 @@
 import 'package:equatable/equatable.dart';
+import 'package:get_it/get_it.dart';
+import 'package:products/core/injection_container.dart';
+import 'package:products/core/services/uuid_service.dart';
 
 class Product extends Equatable {
-  final int id;
+  final String id;
   final String title;
   final String description;
   final bool isFavorite;
@@ -13,8 +16,22 @@ class Product extends Equatable {
     this.isFavorite = false,
   });
 
+  factory Product.create({
+    required String title,
+    required String description,
+    bool isFavorite = false,
+  }) {
+    final uuidService = getIt<UuidService>();
+    return Product(
+      id: uuidService.generate(),
+      title: title,
+      description: description,
+      isFavorite: isFavorite,
+    );
+  }
+
   Product copyWith({
-    int? id,
+    String? id,
     String? title,
     String? description,
     bool? isFavorite,

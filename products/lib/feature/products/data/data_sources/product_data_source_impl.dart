@@ -1,32 +1,31 @@
 import 'package:injectable/injectable.dart';
+import 'package:products/core/services/uuid_service.dart';
 import 'package:products/feature/products/data/data_sources/product_data_source.dart';
 import 'package:products/feature/products/data/models/product_dto.dart';
 
 @LazySingleton(as: ProductDataSource)
 class ProductDataSourceImpl implements ProductDataSource {
   final List<ProductDto> _products = [];
+  final UuidService _uuidService;
 
-  ProductDataSourceImpl() {
-    _seedProducts(1, 10);
+  ProductDataSourceImpl(this._uuidService) {
+    _seedProducts(10);
   }
 
-  void _seedProducts(int startId, int count) {
-    _products.addAll(List.generate(
-        count,
-        (i) => ProductDto(
-              id: startId + i,
-              title: 'Sample Product ${startId + i}',
-              description: 'Description for sample product ${startId + i}',
-              isFavorite: false,
-            )));
-  }
+  void _seedProducts(int count) => _products.addAll(List.generate(
+      count,
+      (i) => ProductDto(
+            id: _uuidService.generate(),
+            title: 'Sample Product ${_products.length + i + 1}',
+            description:
+                'Description for sample product ${_products.length + i + 1}',
+            isFavorite: false,
+          )));
 
   @override
   Future<List<ProductDto>> fetchProducts(int start, int count) async {
-    await Future.delayed(const Duration(milliseconds: 500));
     while (_products.length < start + count) {
-      final lastId = _products.isNotEmpty ? _products.last.id : 0;
-      _seedProducts(lastId + 1, 10);
+      _seedProducts(10);
     }
     final end =
         (start + count) > _products.length ? _products.length : (start + count);
@@ -36,13 +35,13 @@ class ProductDataSourceImpl implements ProductDataSource {
 
   @override
   Future<void> addProduct(ProductDto dto) async {
-    final lastId = _products.isNotEmpty ? _products.last.id : 0;
-    final newDto = dto.copyWith(id: lastId + 1);
+    final newDto =
+        dto.copyWith(id: dto.id.isEmpty ? _uuidService.generate() : dto.id);
     _products.add(newDto);
   }
 
   @override
-  Future<void> updateFavorite(int id, bool isFavorite) async {
+  Future<void> updateFavorite(String id, bool isFavorite) async {
     final index = _products.indexWhere((dto) => dto.id == id);
     if (index != -1) {
       _products[index] = _products[index].copyWith(isFavorite: isFavorite);
@@ -50,7 +49,6 @@ class ProductDataSourceImpl implements ProductDataSource {
   }
 
   @override
-  Future<void> removeProduct(int id) async {
-    _products.removeWhere((dto) => dto.id == id);
-  }
+  Future<void> removeProduct(String id) async =>
+      _products.removeWhere((dto) => dto.id == id);
 }

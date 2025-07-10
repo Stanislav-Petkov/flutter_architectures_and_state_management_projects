@@ -22,14 +22,15 @@ class ProductListCubit extends Cubit<ProductListState> {
         isLoading: false,
         error: null,
       ));
-    }, error: ProductListError.loadMoreProductsError);
+    },
+        error: ProductListError.loadMoreProductsError,
+        errorMessage: 'Failed to load more products');
   }
 
   Future<void> addProduct(String title, String description) async {
     _emitLoading();
     await _errorHandling(() async {
-      final newProduct = Product(
-        id: state.products.length,
+      final newProduct = Product.create(
         title: title,
         description: description,
       );
@@ -41,10 +42,12 @@ class ProductListCubit extends Cubit<ProductListState> {
         error: null,
         isLoading: false,
       ));
-    }, error: ProductListError.addProductError);
+    },
+        error: ProductListError.addProductError,
+        errorMessage: 'Failed to add product');
   }
 
-  Future<void> removeProduct(int id) async {
+  Future<void> removeProduct(String id) async {
     _emitLoading();
     await _errorHandling(() async {
       await _repository.removeProduct(id);
@@ -55,10 +58,12 @@ class ProductListCubit extends Cubit<ProductListState> {
         error: null,
         isLoading: false,
       ));
-    }, error: ProductListError.deleteProductError);
+    },
+        error: ProductListError.deleteProductError,
+        errorMessage: 'Failed to delete product');
   }
 
-  Future<void> toggleFavorite(int id) async {
+  Future<void> toggleFavorite(String id) async {
     _emitLoading();
     await _errorHandling(() async {
       final product = state.products.firstWhere((item) => item.id == id);
@@ -74,28 +79,42 @@ class ProductListCubit extends Cubit<ProductListState> {
         error: null,
         isLoading: false,
       ));
-    }, error: ProductListError.markAsFavoriteError);
+    },
+        error: ProductListError.markAsFavoriteError,
+        errorMessage: 'Failed to mark as favorite');
   }
 
-  void clearError() {
-    emit(state.copyWith(error: null));
-  }
+  void clearError() => emit(state.copyWith(error: null));
 
-  void _emitLoading() {
+  /// Updates a single product in the list with new data
+  void refreshProduct(Product updatedProduct) {
+    final updatedProducts = state.products.map((item) {
+      if (item.id == updatedProduct.id) {
+        return updatedProduct;
+      }
+      return item;
+    }).toList();
+
     emit(state.copyWith(
-      isLoading: true,
+      products: updatedProducts,
       error: null,
     ));
   }
 
+  void _emitLoading() => emit(state.copyWith(
+        isLoading: true,
+        error: null,
+      ));
+
   Future<void> _errorHandling(Future<void> Function() action,
-      {ProductListError? error}) async {
+      {ProductListError? error, String? errorMessage}) async {
     try {
       await action();
     } catch (e) {
       emit(state.copyWith(
         isLoading: false,
         error: error,
+        errorMessage: errorMessage,
       ));
     }
   }
