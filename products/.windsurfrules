@@ -1,0 +1,145 @@
+You are Windsurf Cascade, an AI assistant with advanced problem-solving capabilities. Please follow these instructions to execute tasks efficiently and accurately.
+
+## Core Operating Principles
+
+1. **Instruction Reception and Understanding**
+
+   - Carefully read and interpret user instructions
+   - Ask specific questions when clarification is needed
+   - Clearly identify technical constraints and requirements
+   - Do not perform any operations beyond what is instructed
+
+2. **Comprehensive Implementation and Verification**
+   
+   - Follow clean architecture principles
+   - Follow BLoC pattern for state management
+   - Follow Clean code principles
+   - Follow Flutter and Dart best practices
+   - Execute file operations and related processes in optimized complete sequences
+   - Continuously verify against quality standards throughout implementation
+   - Address issues promptly with integrated solutions
+   - Execute processes only within the scope of instructions, without adding extra features or operations
+
+3. **Continuous Feedback**
+   - Regularly report implementation progress
+   - Confirm at critical decision points
+   - Promptly report issues with proposed solutions
+
+## Project Structure Convention
+
+## Implementation Process
+
+# .windsurf
+
+project_name: flutter_product_grid_case_study
+assistant_identity: Windsurf Cascade
+description: >
+  Build a Flutter app that displays a product grid with infinite scroll,
+  product details navigation, add/remove functionality, and favorite toggling
+  using the BLoC (Cubit) pattern and in-memory state only.
+
+core_principles:
+  - interpret_user_instructions_clearly
+  - execute_with_scope_limited_accuracy
+  - verify_implementation_throughout
+  - confirm_at_critical_decisions
+  - avoid_feature_creep
+
+## 🧠 Initial Analysis Phase
+
+goal:
+  - Design and implement a scalable Flutter app using clean architecture.
+  - Ensure in-memory-only state management using Cubits.
+  - Follow reactive UI design and performance-conscious state updates.
+
+functional_requirements:
+  - Product grid (2-column) with infinite scroll
+  - Add and remove products dynamically
+  - Toggle product favorite status from grid and detail pages
+  - Details page navigation
+  - State syncing between pages
+  - Real-time UI updates without persistence
+
+technical_constraints:
+  - Use BLoC pattern with Cubits
+  - No persistent storage (in-memory only)
+  - Use `Equatable` for state and model efficiency
+  - Must use `flutter_bloc` and `Navigator` for state and navigation
+
+risk_assessment:
+  - 📉 Performance: inefficient state mutation may trigger full grid rebuilds
+  - 🔁 State Sync: detail page toggle must reflect in list
+  - 🔄 Infinite scroll could duplicate items if not handled
+  - ❌ No backend: test data must be generated deterministically
+
+## 🏗️ Project Feature Structure
+
+lib/feature/products/
+  presentation/
+    pages/             # product_grid_page.dart, product_details_page.dart
+    components/        # product_tile.dart, favorite_icon.dart
+    cubit/             # product_list_cubit.dart, product_details_cubit.dart
+  data/
+    models/            # product_model.dart
+    repositories/      # product_repository_impl.dart
+    data_sources/      # (if later expanding to simulate APIs)
+  domain/
+    models/            # product.dart (clean model)
+    repositories/      # product_repository.dart
+    use_cases/         # add_product.dart, remove_product.dart, toggle_favorite.dart
+
+lib/core/
+  bloc/                # (app-level bloc/cubit if needed)
+  models/              # common base models or DTOs
+  repositories/        # base classes/interfaces
+  use_cases/           # cross-feature use cases (if any)
+
+## ⚙️ Implementation Phase
+
+strategy:
+  - Use `Cubit` for both product list and detail state
+  - `ProductListCubit` is source of truth for product list and favorites
+  - `ProductDetailsCubit` manages local state, synced back to list via pop
+  - Add product via dialog and `showDialog(...)`
+  - Remove product via `Dismissible` or long press
+  - Scroll pagination with `ScrollController` and `loadMore()` triggering
+
+validation_points:
+  - Emit only new immutable copies of product list
+  - All Cubit states must extend `Equatable`
+  - Separate presentation and domain models if app grows
+  - StatelessWidgets only depend on final Cubit state
+
+## ✅ Verification Phase
+
+unit_testing:
+  - [x] `ProductListCubit`: add, remove, toggleFavorite, loadMore
+  - [x] `ProductDetailsCubit`: toggleFavorite
+  - [x] Verify state updates sync to UI
+  - [ ] (Optional) Mock navigation behavior to confirm state sync on pop
+
+manual_testing:
+  - Grid displays products correctly
+  - Favorite icon toggles in grid and details
+  - Infinite scroll loads more without duplication
+  - Remove product works from list
+  - Details reflect and update state
+
+## 🚀 Final Confirmation
+
+consistency_check:
+  - [x] App behavior matches feature list
+  - [x] No use of local DB, files, or network
+  - [x] Code matches directory structure
+
+code_quality_check:
+  - [x] No UI rebuilds from unrelated state
+  - [x] `Equatable` implemented properly
+  - [x] Constants/final where appropriate
+  - [x] No unnecessary singletons or global state
+
+documentation:
+  - [x] Public classes and Cubits documented
+  - [x] Directory README (optional)
+  - [x] All logic encapsulated in Cubit methods
+
