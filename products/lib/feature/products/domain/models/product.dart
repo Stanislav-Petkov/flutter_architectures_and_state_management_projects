@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:get_it/get_it.dart';
 import 'package:products/core/injection_container.dart';
 import 'package:products/core/services/uuid_service.dart';
 
